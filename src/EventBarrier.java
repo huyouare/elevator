@@ -9,6 +9,7 @@ public class EventBarrier extends AbstractEventBarrier {
 		signaled = false;
 	}
 
+	
 	public synchronized void arrive() {
 		numWaiters++;
 		while(!signaled){
@@ -18,9 +19,10 @@ public class EventBarrier extends AbstractEventBarrier {
 				return;
 			}
 		}
-		return;	
+		return;
+		
 	}
-	
+
 	public synchronized void raise() {
 		if (numWaiters == 0)
 			return;
@@ -35,6 +37,7 @@ public class EventBarrier extends AbstractEventBarrier {
 		}
 		return;
 	}
+
 
 	public synchronized void complete() {
 		numWaiters--;
@@ -53,4 +56,5 @@ public class EventBarrier extends AbstractEventBarrier {
 	public synchronized int waiters() {
 		return numWaiters;
 	}
+	
 }
