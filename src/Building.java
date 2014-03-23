@@ -16,6 +16,8 @@ public class Building extends AbstractBuilding{
 		}
 	}
 	
+	
+	
 	public Building(int numFloors, int numElevators, Elevator e){
 		super(numFloors, numElevators);
 		myElevator = e;
