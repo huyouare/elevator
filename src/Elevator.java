@@ -8,6 +8,7 @@ public class Elevator extends AbstractElevator implements Runnable{
 	private boolean UP;				//denotes current moving direction.
 	private int numPeople;			
 	private int currFloor;
+	private int myDest; 
 
 	
 	
@@ -43,11 +44,13 @@ public class Elevator extends AbstractElevator implements Runnable{
 		while(true){
 			if ((nextFloor=getNextFloor()) != -1){
 				VisitFloor(nextFloor);
+				myDest = 0;
 			}
 		}
 	}
 	
 	public int getNextFloor(){
+		//if there are still requests;
 		if (UP){
 			for (int i = currFloor; i<numFloors; i++){
 				if (floorThresholds[i].waiters()>0){
@@ -69,8 +72,15 @@ public class Elevator extends AbstractElevator implements Runnable{
 			}
 		}
 		
+		ArrayList<Integer> prohibitedFloors = new ArrayList<Integer>();
+		for(int i = 0; i<myBuilding.numElevators; i++){
+			prohibitedFloors.add(myBuilding.myElevators[i].myDest);
+		}
+		synchronized(myBuilding.lock){
+		myDest = myBuilding.getClosestRequest(currFloor, prohibitedFloors, this);
+		}
 		//get available request on Building, this will also set my direction to be correct for the riders there.
-		return myBuilding.getClosestRequest(currFloor, this);
+		return myDest;
 		
 		
 	}
@@ -86,7 +96,7 @@ public class Elevator extends AbstractElevator implements Runnable{
 		myBuilding.allowRidersOn(currFloor, UP, this);
 	}
 	public void VisitFloor(int floor) {
-		System.out.println("Visiting Floor: " + floor + " " + Thread.currentThread().getName());
+		System.out.println("Visiting Floor :" + floor);
 		currFloor = floor;	
 		OpenDoors(); //let riders off;
 		CloseDoors(); //let new riders on;

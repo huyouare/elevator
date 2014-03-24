@@ -1,9 +1,14 @@
+import java.util.ArrayList;
+
 
 public class Building extends AbstractBuilding{
-	private Elevator myFloors[];
+	public Object lock; 
+	public Elevator[] myFloors;
+	public Elevator[] myElevators;
+	
+
 	private EventBarrier [] thresholdsUp; //one for each floor
 	private EventBarrier [] thresholdsDown;
-	
 	
 	public Building(int numFloors, int numElevators) {
 		super(numFloors, numElevators);
@@ -16,8 +21,10 @@ public class Building extends AbstractBuilding{
 			thresholdsDown[i] = new EventBarrier();
 		}
 	}
-	public Building(int numFloors, int numElevators, int MaxThreshold){
+	public Building(int numFloors, int numElevators, int maxThreshold){
 		super(numFloors, numElevators);
+		lock = new Object();
+		
 		thresholdsUp = new EventBarrier[numFloors];
 		for (int i = 0; i<numFloors; i++){
 			thresholdsUp[i] = new EventBarrier();
@@ -26,11 +33,14 @@ public class Building extends AbstractBuilding{
 		for (int i = 0; i<numFloors; i++){
 			thresholdsDown[i] = new EventBarrier();
 		}
+		myElevators = new Elevator[numElevators];
 		myFloors = new Elevator[numFloors];
-		for (int i = 0; i < numElevators; i++){
-			(new Thread(new Elevator(numFloors, i, MaxThreshold, this))).start();
+		for(int i = 0; i<numElevators; i++){
+			myElevators[i] = new Elevator(numFloors, i, maxThreshold, this);
 		}
-		
+		for(int i = 0; i<numElevators; i++){
+			(new Thread(myElevators[i])).start();
+		}
 	}
 
 	//a waiter comes, notifies the building he's there, and blocks at the event barrier.
@@ -83,23 +93,23 @@ public class Building extends AbstractBuilding{
 	
 	
 	//called by an elevator to get a pickup request in ANY direction.
-	public int getClosestRequest(int currFloor, Elevator e) {
+	public int getClosestRequest(int currFloor, ArrayList<Integer> prohibitedFloors, Elevator e) {
 		for (int i = 0; i<numFloors; i++){
 			if (currFloor-i < 0 && currFloor+i >= numFloors)
 				return -1;
-			if (currFloor-i>=0 && thresholdsUp[currFloor-i].waiters()>0){
+			if (currFloor-i>=0 && thresholdsUp[currFloor-i].waiters()>0 && !prohibitedFloors.contains(currFloor-i)){
 				e.setDirection(true);
 				return currFloor-i;
 			}
-			if (currFloor-i>=0 && thresholdsDown[currFloor-i].waiters()>0){
+			if (currFloor-i>=0 && thresholdsDown[currFloor-i].waiters()>0 && !prohibitedFloors.contains(currFloor-i)){
 				e.setDirection(false);
 				return currFloor-i;
 			}
-			if (currFloor+i<numFloors && thresholdsUp[currFloor+i].waiters()>0){
+			if (currFloor+i<numFloors && thresholdsUp[currFloor+i].waiters()>0 && !prohibitedFloors.contains(currFloor+i)){
 				e.setDirection(true);
 				return currFloor+i;
 			}
-			if (currFloor+i<numFloors && thresholdsDown[currFloor+i].waiters()>0){
+			if (currFloor+i<numFloors && thresholdsDown[currFloor+i].waiters()>0 && !prohibitedFloors.contains(currFloor+i)){
 				e.setDirection(false);
 				return currFloor+i;
 			}

@@ -36,12 +36,12 @@ public class Rider implements Runnable {
 			e.Exit();
 			myFloor = floorVisits[i];
 			sleeper = r.nextInt(1000);
-			System.out.println("HI, I'm rider " + Thread.currentThread().getName() + " and I'm on floor " + myFloor);
 			try {
 				Thread.currentThread().sleep(sleeper);
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
+			System.out.println("HI, I'm rider " + Thread.currentThread().getName() + " and I'm on floor " + myFloor);
 		}
 	}
 
