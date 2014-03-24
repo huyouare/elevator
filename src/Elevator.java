@@ -32,6 +32,11 @@ public class Elevator extends AbstractElevator implements Runnable{
 			floorThresholds[i]=new EventBarrier();
 		}
 	}
+	
+	public int getId(){
+		return super.elevatorId;
+	}
+	
 	public void addBuilding(Building b){
 		myBuilding = b;
 	}

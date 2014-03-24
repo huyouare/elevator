@@ -41,20 +41,30 @@ public class Rider implements Runnable {
 		for (int i = 0 ; i<floorVisits.length; i++){
 			if (floorVisits[i]>myFloor){
 				e = myBuilding.CallUp(myFloor);
+				Logger.log("R" + myNumber + " pushes U" + (myFloor+1)); //Output floor number, not index
 			}
 			else{
 				e = myBuilding.CallDown(myFloor);
+				Logger.log("R" + myNumber + " pushes D" + (myFloor+1)); //Output floor number, not index
 			}
 			while (!e.Enter()){	
 				if (floorVisits[i]>myFloor){
 					e = myBuilding.CallUp(myFloor);
+					Logger.log("R" + myNumber + " pushes U" + (myFloor+1)); //Output floor number, not index
 				}
 				else{
 					e = myBuilding.CallDown(myFloor);
+					Logger.log("R" + myNumber + " pushes D" + (myFloor+1)); //Output floor number, not index
 				}
 			}
+			
+			Logger.log("R" + myNumber + " pushes E" + e.elevatorId + "F" + (floorVisits[i]+1));
 			e.RequestFloor(floorVisits[i]);
+			Logger.log("R" + myNumber + " enters E" + e.elevatorId + " on F" + (myFloor+1));
+			
 			e.Exit();
+			Logger.log("R" + myNumber + " exits E" + e.elevatorId + " on F" + (floorVisits[i]+1));
+			
 			myFloor = floorVisits[i];
 			sleeper = r.nextInt(1000);
 			try {
