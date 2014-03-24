@@ -9,8 +9,6 @@ public class Elevator extends AbstractElevator implements Runnable{
 	private int numPeople;			
 	private int currFloor;
 	private int myDest; 
-
-	
 	
 	
 	public Elevator(int numFloors, int elevatorId, int maxOccupancyThreshold) {

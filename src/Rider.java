@@ -6,12 +6,33 @@ public class Rider implements Runnable {
 	private int[] floorVisits;
 	private Building myBuilding;
 	private Random r;
+	private int myNumber;
 	
 	public Rider(int [] f, Building b){
 		myBuilding = b;
 		myFloor =0;
 		floorVisits=f;
 		r = new Random(1234);
+	}
+	
+	public Rider(int [] f, Building b, int startFloor, int riderNumber){
+		myBuilding = b;
+		myFloor = startFloor;
+		floorVisits=f;
+		r = new Random(1234);
+		myNumber = riderNumber;
+	}
+	
+	public int[] getFloorVisits(){
+		return this.floorVisits;
+	}
+	
+	public int getNumber(){
+		return this.myNumber;
+	}
+	
+	public void setFloorVisits(int[] visits){
+		this.floorVisits = visits;
 	}
 	
 	public void run() {
