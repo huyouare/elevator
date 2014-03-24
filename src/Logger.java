@@ -1,18 +1,27 @@
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 
 public class Logger {
-    public static void log(String message){ 
-    	PrintWriter out;
+	static PrintStream out;
+	
+	public static void open(){
 		try {
-			out = new PrintWriter(new FileWriter("output.log"), true);
-		    out.write(message);
-		    out.close();
+			out = new PrintStream(new File("output.log"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			System.out.println("Error");
 			e.printStackTrace();
 		}
-
+	}
+    public static void log(String message){ 
+    	System.out.println("Writing: " + message);
+		out.println(message);
+	}
+    public static void close(){
+    	out.close();
     }
 }

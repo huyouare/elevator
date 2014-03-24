@@ -58,6 +58,7 @@ public class Rider implements Runnable {
 				}
 			}
 			
+			System.out.println("R" + myNumber + " pushes E" + e.elevatorId + "F" + (floorVisits[i]+1));
 			Logger.log("R" + myNumber + " pushes E" + e.elevatorId + "F" + (floorVisits[i]+1));
 			e.RequestFloor(floorVisits[i]);
 			Logger.log("R" + myNumber + " enters E" + e.elevatorId + " on F" + (myFloor+1));

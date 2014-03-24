@@ -1,12 +1,7 @@
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Random;
 import java.util.Scanner;
 
 public class Test {
@@ -46,7 +41,7 @@ public class Test {
 		
 //		PrintStream out = new PrintStream(new FileOutputStream("output.txt"));
 //		System.setOut(out);
-		Logger.log("Start");
+		Logger.open();
 		
 		int numFloors = in.nextInt();
 		int numElevators = in.nextInt();
@@ -66,11 +61,24 @@ public class Test {
 			System.out.println("Error: too many arguments");
 		}
 		else{	// known just one arg
-			if(args[1].equals("p1")){
+			if(args[0].equals("p1")){
 			// call the EventBarrier"
-				
+				EventBarrier e = new EventBarrier();
+				Thread m1 = new Thread(new Minstrel(e));
+				Thread m2 = new Thread(new Minstrel(e));
+				Thread m3 = new Thread(new Minstrel(e));
+				Thread g1 = new Thread(new Gaurd(e));
+				m1.start();
+				m2.start();
+				g1.start();
+				try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+				m3.start();
 			}
-			if(args[1].equals("p2part1")){
+			else if(args[0].equals("p2part1")){
 			// call the elevator part1
 			//	Include a test program that demonstrates the operation of your elevator for multiple riders. 
 			//	Your program should be "well-behaved" in the following sense: 
@@ -80,13 +88,12 @@ public class Test {
 				b = new Building(numFloors, 1);
 				runTest(b, in);
 			} 
-			else if(args[1].equals("p2part2")){
+			else if(args[0].equals("p2part2")){
 			// call the elevator part2
 				b = new Building(numFloors, 1, maxCapacity);
 				runTest(b, in);
-				
 			} 
-			else if(args[1].equals("p2part3")){
+			else if(args[0].equals("p2part3")){
 			// call the elevator part3
 				b = new Building(numFloors, numElevators, maxCapacity);
 				runTest(b, in);
