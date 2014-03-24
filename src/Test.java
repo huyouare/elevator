@@ -1,10 +1,18 @@
-import java.io.FileWriter;
-import java.io.PrintWriter;
-
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.Scanner;
 
 public class Test {
-	public static void main(String[] args){
-
+	
+	public static void main(String[] args) throws IOException{
+		//Scanner in = new Scanner(new FileReader("input.txt"));
+		
+//		PrintStream out = new PrintStream(new FileOutputStream("output.txt"));
+//		System.setOut(out);
+		Logger.log("Start");
 		
 		if(args.length == 0){
 			// No options specified; make the default as the part 3 elevator submission
