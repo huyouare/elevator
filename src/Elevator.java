@@ -80,7 +80,7 @@ public class Elevator extends AbstractElevator implements Runnable{
 			prohibitedFloors.add(myBuilding.myElevators[i].myDest);
 		}
 		synchronized(myBuilding.lock){
-		myDest = myBuilding.getClosestRequest(currFloor, prohibitedFloors, this);
+			myDest = myBuilding.getClosestRequest(currFloor, prohibitedFloors, this);
 		}
 		//get available request on Building, this will also set my direction to be correct for the riders there.
 		return myDest;
@@ -94,12 +94,15 @@ public class Elevator extends AbstractElevator implements Runnable{
 	//allow current riders OFF. They will complete in Exit.
 	public void OpenDoors() {
 		floorThresholds[currFloor].raise();
+		Logger.log("E" + super.elevatorId + " on F" + currFloor + " opens");
 	}
 	public void CloseDoors() {	
 		myBuilding.allowRidersOn(currFloor, UP, this);
+		Logger.log("E" + super.elevatorId + " on F" + currFloor + " closes");
 	}
 	public void VisitFloor(int floor) {
 		System.out.println("Visiting Floor :" + floor);
+		Logger.log("E" + super.elevatorId + " moves up to F" + floor);
 		currFloor = floor;	
 		OpenDoors(); //let riders off;
 		CloseDoors(); //let new riders on;

@@ -58,21 +58,20 @@ public class Rider implements Runnable {
 				}
 			}
 			
-			System.out.println("R" + myNumber + " pushes E" + e.elevatorId + "F" + (floorVisits[i]+1));
-			Logger.log("R" + myNumber + " pushes E" + e.elevatorId + "F" + (floorVisits[i]+1));
-			e.RequestFloor(floorVisits[i]);
 			Logger.log("R" + myNumber + " enters E" + e.elevatorId + " on F" + (myFloor+1));
+			e.RequestFloor(floorVisits[i]);
+			Logger.log("R" + myNumber + " pushes E" + e.elevatorId + "F" + (floorVisits[i]+1));
 			
 			e.Exit();
 			Logger.log("R" + myNumber + " exits E" + e.elevatorId + " on F" + (floorVisits[i]+1));
 			
 			myFloor = floorVisits[i];
 			sleeper = r.nextInt(1000);
-			try {
-				Thread.currentThread().sleep(sleeper);
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
+//			try {
+//				Thread.currentThread().sleep(sleeper);
+//			} catch (InterruptedException e1) {
+//				e1.printStackTrace();
+//			}
 			System.out.println("HI, I'm rider " + Thread.currentThread().getName() + " and I'm on floor " + myFloor);
 		}
 	}
