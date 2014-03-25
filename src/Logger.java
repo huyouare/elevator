@@ -10,9 +10,8 @@ public class Logger {
 	
 	public static void open(){
 		try {
-			out = new PrintStream(new File("output.log"));
+			out = new PrintStream(new File("Elevator.log"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			System.out.println("Error");
 			e.printStackTrace();
 		}

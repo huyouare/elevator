@@ -15,10 +15,7 @@ public class Elevator extends AbstractElevator implements Runnable{
 								//floor is already the myDest of another elevator
 	
 	private double arriveTime;  //used to make sure that an elevator only leaves once everyone has 
-								//requested a floor
-
-
-	
+								//requested a floor	
 	
 	
 	public Elevator(int numFloors, int elevatorId, int maxOccupancyThreshold) {
@@ -42,6 +39,11 @@ public class Elevator extends AbstractElevator implements Runnable{
 			floorThresholds[i]=new EventBarrier();
 		}
 	}
+	
+	public int getId(){
+		return super.elevatorId;
+	}
+	
 	public void addBuilding(Building b){
 		myBuilding = b;
 	}
@@ -113,7 +115,6 @@ public class Elevator extends AbstractElevator implements Runnable{
 		
 		return myDest;
 		
-		
 	}
 	
 	
@@ -121,15 +122,23 @@ public class Elevator extends AbstractElevator implements Runnable{
 	
 	//allow current riders OFF. They will complete in Exit.
 	public void OpenDoors() {
+		Logger.log("E" + super.elevatorId + " on F" + currFloor + " opens");
 		floorThresholds[currFloor-1].raise();
 	}
 	//allow new riders on. This is just a small wrapper around raise(), and riders complete in enter()
 	public void CloseDoors() {	
 		myBuilding.allowRidersOn(currFloor, UP, this);
+		Logger.log("E" + super.elevatorId + " on F" + currFloor + " closes");
 	}
 	
 	public void VisitFloor(int floor) {
 		System.out.println("Visiting Floor :" + floor);
+		if(floor == currFloor)
+			Logger.log("E" + super.elevatorId + " is on F" + floor);
+		else if(floor>currFloor)
+			Logger.log("E" + super.elevatorId + " moves up to F" + floor);
+		else
+			Logger.log("E" + super.elevatorId + " moves down to F" + floor);
 		//System.out.println(this.hashCode());
 		currFloor = floor;	
 		OpenDoors(); //let riders off;
@@ -143,12 +152,14 @@ public class Elevator extends AbstractElevator implements Runnable{
 			synchronized(this){
 				numPeople++;
 			}
+			Logger.log("R" + Thread.currentThread().getName() + " enters E" + this.elevatorId + " on F" + (currFloor));
 			System.out.println("Inside elevator -" + Thread.currentThread().getName());
 			myBuilding.tellBuilding(currFloor, UP);  //notify Building that you're on the Elevator, i.e.,
 			//complete on the event which was raised in closedoors
 			return true;
 		}
 		myBuilding.tellBuilding(currFloor, UP);   //If you weren't able to get in, we still want you to complete
+		System.out.println("ELEVATOR GO UP!");
 		//on the event so that the elevator isn't blocking forever. This is fine because you callUp or callDown again
 		//right after. 
 		return false;
@@ -160,13 +171,13 @@ public class Elevator extends AbstractElevator implements Runnable{
 			numPeople--;
 		}
 		System.out.println("Arrived at floor " + currFloor + " " + Thread.currentThread().getName());
-		floorThresholds[currFloor].complete(); //complete on the event which is raised in openDoors.
+		floorThresholds[currFloor-1].complete(); //complete on the event which is raised in openDoors.
 	}
 
 	//requesting a floor is equivalent to arriving at the eventbarrier for that floor
 	//the rider thread will block here until the elevator lets him off at his correct floor.
 	public void RequestFloor(int floor) {
-		floorThresholds[floor].arrive(); //rider waits here until we get to his floor;
+		floorThresholds[floor-1].arrive(); //rider waits here until we get to his floor;
 	}
 	
 	public void setDirection(boolean Up){
