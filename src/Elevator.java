@@ -80,7 +80,7 @@ public class Elevator extends AbstractElevator implements Runnable{
 				}
 			}
 		}
-		System.out.println(System.currentTimeMillis()-arriveTime);
+		//System.out.println(System.currentTimeMillis()-arriveTime);
 		if(System.currentTimeMillis()-arriveTime>=5000)
 			timeOut = true;
 		
