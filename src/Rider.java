@@ -10,15 +10,21 @@ public class Rider implements Runnable {
 	
 	public Rider(int [] f, Building b){
 		myBuilding = b;
-		myFloor =0;
-		floorVisits=f;
+		myFloor =1;
+		floorVisits= new int[f.length];
+		for(int i = 0; i<f.length; i++){
+			floorVisits[i]=f[i];
+		}
 		r = new Random(1234);
 	}
 	
 	public Rider(int [] f, Building b, int startFloor, int riderNumber){
 		myBuilding = b;
 		myFloor = startFloor;
-		floorVisits=f;
+		floorVisits= new int[f.length];
+		for(int i = 0; i<f.length; i++){
+			floorVisits[i]=f[i];
+		}
 		r = new Random(1234);
 		myNumber = riderNumber;
 	}
@@ -40,6 +46,7 @@ public class Rider implements Runnable {
 		int sleeper;
 		for (int i = 0 ; i<floorVisits.length; i++){
 			if (floorVisits[i]>myFloor){
+				System.out.println("Do we get here0");
 				e = myBuilding.CallUp(myFloor);
 				Logger.log("R" + myNumber + " pushes U" + (myFloor+1)); //Output floor number, not index
 			}
@@ -47,31 +54,25 @@ public class Rider implements Runnable {
 				e = myBuilding.CallDown(myFloor);
 				Logger.log("R" + myNumber + " pushes D" + (myFloor+1)); //Output floor number, not index
 			}
+			System.out.println("Do we get here1?");
 			while (!e.Enter()){	
+				System.out.println("do we get here2?");
 				if (floorVisits[i]>myFloor){
 					e = myBuilding.CallUp(myFloor);
-					Logger.log("R" + myNumber + " pushes U" + (myFloor+1)); //Output floor number, not index
 				}
 				else{
 					e = myBuilding.CallDown(myFloor);
-					Logger.log("R" + myNumber + " pushes D" + (myFloor+1)); //Output floor number, not index
 				}
 			}
-			
-			Logger.log("R" + myNumber + " enters E" + e.elevatorId + " on F" + (myFloor+1));
 			e.RequestFloor(floorVisits[i]);
-			Logger.log("R" + myNumber + " pushes E" + e.elevatorId + "F" + (floorVisits[i]+1));
-			
 			e.Exit();
-			Logger.log("R" + myNumber + " exits E" + e.elevatorId + " on F" + (floorVisits[i]+1));
-			
 			myFloor = floorVisits[i];
 			sleeper = r.nextInt(1000);
-//			try {
-//				Thread.currentThread().sleep(sleeper);
-//			} catch (InterruptedException e1) {
-//				e1.printStackTrace();
-//			}
+			try {
+				Thread.currentThread().sleep(sleeper);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
 			System.out.println("HI, I'm rider " + Thread.currentThread().getName() + " and I'm on floor " + myFloor);
 		}
 	}

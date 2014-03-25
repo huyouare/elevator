@@ -11,8 +11,8 @@ public class Runner {
 			for(int j = 0; j<10; j++){
 				rider[j]=r.nextInt(150);
 			}
-		System.out.println("Rider" + i + " : " + Arrays.toString(rider));
-		(new Thread(new Rider(rider, b))).start();
+			System.out.println("Rider" + i + " : " + Arrays.toString(rider));
+			(new Thread(new Rider(rider, b))).start();
 		}
 	}
 }
