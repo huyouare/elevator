@@ -46,7 +46,7 @@ public class Test {
 		
 		if(args.length == 0){
 			// No options specified; make the default as the part 3 elevator submission
-			Scanner in = new Scanner(new FileReader("./src/input.txt"));
+			Scanner in = new Scanner(new FileReader("./input.txt"));
 			int numFloors = in.nextInt();
 			int numElevators = in.nextInt();
 			int numRiders = in.nextInt();
