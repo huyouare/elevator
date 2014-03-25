@@ -33,6 +33,7 @@ public class Elevator extends AbstractElevator implements Runnable{
 		}
 	}
 	
+	
 	public int getId(){
 		return super.elevatorId;
 	}
