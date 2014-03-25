@@ -68,10 +68,9 @@ public class Rider implements Runnable {
 				e = myBuilding.CallDown(myFloor);
 			}
 			//System.out.println("Do we get here1?");
-			
-			if(behavior==1)
+			if(behavior==1){
 				continue;
-			
+			}
 			while (!e.Enter()){	
 				//System.out.println("do we get here2?");
 				if (floorVisits[i]>myFloor){
@@ -91,7 +90,6 @@ public class Rider implements Runnable {
 			e.RequestFloor(floorVisits[i]);
 			
 			if(behavior==3)
-				continue;
 			
 			e.Exit();
 			Logger.log("R" + myNumber + " exits E" + e.elevatorId + " on F" + (floorVisits[i]));

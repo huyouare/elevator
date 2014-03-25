@@ -53,7 +53,8 @@ public class Elevator extends AbstractElevator implements Runnable{
 		int nextFloor;
 		while(true){
 			arriveTime = System.currentTimeMillis();
-			while ((nextFloor=getNextFloor()) != -1){
+			double weirdTime = System.currentTimeMillis();
+			while ((nextFloor=getNextFloor()) != -1) {
 				VisitFloor(nextFloor);
 				myDest = 0;
 				arriveTime = System.currentTimeMillis();
@@ -62,12 +63,15 @@ public class Elevator extends AbstractElevator implements Runnable{
 	}
 	
 	public int getNextFloor(){
+		boolean timeOut = false;
 		int counter = 0; //total number of floorRequests
-		
-		while(counter<numPeople && (System.currentTimeMillis()-arriveTime<1000)){//if the total number of
+		//System.out.println("Counter: " + counter + " People: " + numPeople);
+		//System.out.println("currenttime-arriveTime: "+ (System.currentTimeMillis()-arriveTime));
+		while(counter<numPeople && (System.currentTimeMillis()-arriveTime<5000)){//if the total number of
 			//floor requests is less than the number of people on the elevator, then we have to keep looping
-			//until everyone enters a request. However, if we have looped for over a second, then we assume
+			//until everyone enters a request. However, if we have looped for over 5 seconds, then we assume
 			//that we're dealing with someone who got in but didn't request a floor, so we break out of the loop
+			//System.out.println("currenttime-arriveTime: "+ (System.currentTimeMillis()-arriveTime));
 			synchronized(this){
 				//recompute the total number of floor requests atomically
 				counter = 0;
@@ -76,12 +80,16 @@ public class Elevator extends AbstractElevator implements Runnable{
 				}
 			}
 		}
-		
+		System.out.println(System.currentTimeMillis()-arriveTime);
+		if(System.currentTimeMillis()-arriveTime>=5000)
+			timeOut = true;
 		
 		if (UP){
 			//standard elevator algorithm...look to say if we need to let anyone off or on in our 
 			//same direction.
 			for (int i = currFloor; i<numFloors+1; i++){
+				if(timeOut && i==currFloor)
+					i++;
 				if (floorThresholds[i-1].waiters()>0){
 					return i;
 				}
@@ -92,6 +100,8 @@ public class Elevator extends AbstractElevator implements Runnable{
 		}
 		else{
 			for (int i = currFloor; i>=1; i--){
+				if(timeOut && i==currFloor)
+					i--;
 				if (floorThresholds[i-1].waiters()>0){
 					return i;
 				}

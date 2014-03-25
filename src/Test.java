@@ -37,21 +37,21 @@ public class Test {
 	}
 	
 	public static void main(String[] args) throws IOException{
-		Scanner in = new Scanner(new FileReader(args[1]));
+		
 		//input.txt or test1.txt or test2.txt or test3.txt or test-extra.txt
 		
 //		PrintStream out = new PrintStream(new FileOutputStream("output.txt"));
 //		System.setOut(out);
 		Logger.open();
 		
-		int numFloors = in.nextInt();
-		int numElevators = in.nextInt();
-		int numRiders = in.nextInt();
-		int maxCapacity = in.nextInt();
-		Building b;
-		
 		if(args.length == 0){
 			// No options specified; make the default as the part 3 elevator submission
+			Scanner in = new Scanner(new FileReader("./src/input.txt"));
+			int numFloors = in.nextInt();
+			int numElevators = in.nextInt();
+			int numRiders = in.nextInt();
+			int maxCapacity = in.nextInt();
+			Building b;
 			System.out.println("Using default: Part 3");
 			// call the elevator part3
 			b = new Building(numFloors, numElevators, maxCapacity);
@@ -62,6 +62,12 @@ public class Test {
 			System.out.println("Error: too many arguments");
 		}
 		else{	// known just one arg
+			Scanner in = new Scanner(new FileReader(args[1]));
+			int numFloors = in.nextInt();
+			int numElevators = in.nextInt();
+			int numRiders = in.nextInt();
+			int maxCapacity = in.nextInt();
+			Building b;
 			if(args[0].equals("p1")){
 			// call the EventBarrier"
 				EventBarrier e = new EventBarrier();

@@ -1,0 +1,12 @@
+R1 pushes U1
+E0 is on F1
+E0 on F1 opens
+R2 pushes U1
+R1 enters E0 on F1
+R2 enters E0 on F1
+R3 pushes U1
+E0 on F1 closes
+R2 pushes E0F5
+E0 moves up to F5
+E0 on F5 opens
+R2 exits E0 on F5
